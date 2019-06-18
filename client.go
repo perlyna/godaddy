@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 )
 
 // RequestExecute request execute
-func (c *Context) RequestExecute(customerID string, request *http.Request, result interface{}) error {
-	if len(strings.TrimSpace(customerID)) != 0 {
-		request.Header.Set("X-Shopper-Id", customerID)
+func (c *Context) RequestExecute(request *http.Request, result interface{}) error {
+	if len(c.XShopperID) != 0 {
+		request.Header.Set("X-Shopper-Id", c.XShopperID)
 	}
 	request.Header.Set("Authorization", c.authorization)
 	request.Header.Set("Content-Type", "application/json")
@@ -21,7 +20,7 @@ func (c *Context) RequestExecute(customerID string, request *http.Request, resul
 		return err
 	}
 	defer response.Body.Close()
-	if response.StatusCode == 204 {
+	if response.StatusCode == 204 || response.StatusCode == 201 {
 		return nil
 	}
 	if result == nil && response.StatusCode == 200 {

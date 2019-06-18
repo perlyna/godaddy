@@ -65,7 +65,7 @@ func Test_UpdateRecords(t *testing.T) {
 		return
 	}
 	records := []Record{Record{Data: "8.8.8.8", Name: "*", TTL: DefaultTTL, RecordType: "A"}, Record{Data: "114.114.114.114", Name: "*", TTL: DefaultTTL, RecordType: AType}}
-	if err = c.UpdateRecords(domains[0].Domain, A, records); err != nil {
+	if err = c.UpdateRecordsByType(domains[0].Domain, records, A); err != nil {
 		t.Errorf("%s", err.Error())
 		return
 	}
